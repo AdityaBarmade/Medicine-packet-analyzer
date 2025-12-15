@@ -1,141 +1,230 @@
-Medicine Packet Analyzer
+# Medicine Packet Analyzer
+
 Medicine Packet Analyzer is a Python-based desktop application that reads text from medicine packet images and converts it into clear, structured medical information using OCR and an AI model (Google Gemini).
-Overview
-Medicine packets usually contain critical details such as drug name, dosage, expiry, warnings, and usage instructions, which are often hard to read or understand for non-experts. This project lets users upload an image of a medicine strip or box, extracts text via OCR, and then uses Gemini to generate a patient-friendly explanation of the medicine information.​
 
-Features
-Modern PyQt5 GUI to upload medicine images and view results.​
+## Table of Contents
 
-Image preprocessing (resize, grayscale, enhancement) before OCR for better recognition.​
+- [Overview](#overview)  
+- [Features](#features)  
+- [System Architecture](#system-architecture)  
+- [Tech Stack](#tech-stack)  
+- [Project Structure](#project-structure)  
+- [Installation](#installation)  
+- [Usage](#usage)  
+- [Input and Output](#input-and-output)  
+- [Advantages](#advantages)  
+- [Future Work](#future-work)  
+- [Contributors](#contributors)  
+- [License](#license)  
 
-Dual OCR pipeline using EasyOCR (primary) and Tesseract (fallback) to improve accuracy.​
+## Overview
 
-AI-powered summarization with Google Gemini API: usage, warnings, dosage, expiry, alternatives, and more.​
+Medicine packets usually contain critical details such as drug name, dosage, expiry, warnings, and usage instructions, which are often hard to read or understand for non-experts.[file:21] This project lets users upload an image of a medicine strip or box, extracts text via OCR, and then uses Gemini to generate a patient-friendly explanation of the medicine information.
 
-Scrollable, editable result box with copy-to-clipboard and save-to-file options.​
+## Features
 
-Basic error handling when no text is detected or the AI service fails.​
+- Modern PyQt5 GUI to upload medicine images and view results.  
+- Image preprocessing (resize, grayscale, enhancement) before OCR for better recognition. 
+- Dual OCR pipeline using EasyOCR (primary) and Tesseract (fallback) to improve accuracy.
+- AI-powered summarization with Google Gemini API: usage, warnings, dosage, expiry, alternatives, and more. 
+- Scrollable, editable result box with copy-to-clipboard and save-to-file options.
+- Basic error handling when no text is detected or the AI service fails.
 
-System Architecture
-The project follows a layered architecture to keep components modular and maintainable.​
+## System Architecture
 
-User Interface Layer (PyQt5): GUI for selecting images, starting analysis, and visualizing results.​
+The project follows a layered architecture to keep components modular and maintainable.
 
-Image Processing Layer (OpenCV & PIL): Cleans and prepares images for OCR.​
+- **User Interface Layer (PyQt5):** GUI for selecting images, starting analysis, and visualizing results. 
+- **Image Processing Layer (OpenCV & PIL):** Cleans and prepares images for OCR.
+- **OCR Engine Layer (EasyOCR / Tesseract):** Extracts raw text from the processed image. 
+- **AI Analysis Layer (Gemini API):** Interprets OCR text using an LLM to produce structured summaries.
+- **Output Rendering Layer (PyQt5):** Displays processed information and supports user actions like copy/save.
 
-OCR Engine Layer (EasyOCR / Tesseract): Extracts raw text from the processed image.​
+## Tech Stack
 
-AI Analysis Layer (Gemini API): Interprets OCR text using an LLM to produce structured summaries.​
+| Component          | Technology / Tool                        |
+|--------------------|-------------------------------------------|
+| Programming        | Python 3.10+                             |
+| GUI Framework      | PyQt5                                    |
+| OCR Engines        | EasyOCR, Tesseract OCR                   |
+| Image Processing   | OpenCV, Pillow (PIL)                     |
+| AI / LLM           | Google Gemini API                        |
+| Config Management  | `python-dotenv` with `.env` file         |
+| Environment / IDE  | Local Python environment                 |
 
-Output Rendering Layer (PyQt5): Displays processed information and supports user actions like copy/save.​
-Tech Stack
-| Component         | Technology / Tool            |
-| ----------------- | ---------------------------- |
-| Programming       | Python 3.10+                 |
-| GUI Framework     | PyQt5                        |
-| OCR Engines       | EasyOCR, Tesseract OCR       |
-| Image Processing  | OpenCV, Pillow (PIL)         |
-| AI / LLM          | Google Gemini API            |
-| Config Management | python-dotenv with .env file |
-| Environment / IDE | Local Python environment     |
-Project Structure
-Your repository can be structured as follows (matching your files as closely as possible):
-.
-├── main.py           # CLI entry point (image path from terminal)
-├── gui_app.py        # PyQt5 GUI application
-├── analyzer.py       # Connects OCR and Gemini to produce final analysis
-├── ocr_engine.py     # OCR logic (EasyOCR + Tesseract)
-├── gemini_ai.py      # Gemini API integration and prompt construction
-├── requirements.txt  # Python dependencies
-├── .env.example      # Example environment configuration
+These tools were selected for robust OCR, flexible GUI design, and easy integration with AI services.
+
+## Project Structure
+
+Medicine-packet-analyzer/
+
+
+├── main.py                
+├── gui_app.py               
+├── analyzer.py             
+├── ocr_engine.py           
+├── gemini_ai.py           
+├── requirements.txt       
+├── .env.example            
+│
+├── assets/                
+│   ├── ui.png              
+│   ├── upload.png          
+│   └── output.png         
+│
 └── README.md
 
-main.py runs OCR + AI from the command line using an image path.​
 
-gui_app.py launches the graphical interface for interactive use.​
+## Installation
 
-ocr_engine.py encapsulates image loading, preprocessing, and OCR calls.​
+1. **Clone the repository**
+   git clone https://github.com/AdityaBarmade/Medicine-packet-analyzer.git
+   
+### Step 2: Environment Setup
 
-gemini_ai.py prepares prompts and sends requests to the Gemini model.​
+**Virtual Environment (Recommended)**
+Create virtual environment
+python -m venv medicine_env
 
-analyzer.py ties OCR and AI together into a single analyze_medicine_packet function.​
+Activate (Windows)
+medicine_env\Scripts\activate
 
-Installation
-1. Clone the repository
-git clone https://github.com/AdityaBarmade/Medicine-packet-analyzer.git
-cd Medicine-packet-analyzer
-2. Create and activate a virtual environment 
-python -m venv .venv
-# Windows
-.venv\Scripts\activate
-# Linux / macOS
-source .venv/bin/activate
-3. Install dependencies
-requirements.txt should include at least: easyocr, opencv-python, pillow, pytesseract, PyQt5, python-dotenv, requests
+Activate (Linux/macOS)
+source medicine_env/bin/activate
+ 
+3. **Install dependencies**
+
 pip install -r requirements.txt
-4. Configure the Gemini API key
+
+### Step 4: Tesseract OCR Setup
+
+**Windows:**
+1. Download Tesseract from [GitHub](https://github.com/UB-Mannheim/tesseract/wiki)
+2. Install and add to PATH
+
+**Linux:**
+sudo apt update
+sudo apt install tesseract-ocr
+
+**macOS:**
+brew install tesseract
+
+2. Edit `.env` file:
+
+**Get FREE Gemini API key:** [Google AI Studio](https://makersuite.google.com/app/apikey)
+
+4. **Configure the Gemini API key**
+
+Create a `.env` file in the project root:
 GEMINI_API_KEY=your_gemini_api_key_here
-The key is loaded using python-dotenv so you do not need to hardcode it in gemini_ai.py.​
-Usage
-CLI Mode
+
+The key is loaded using `python-dotenv` so you do not need to hardcode it in `gemini_ai.py`.
+
+## Usage
+
+### CLI Mode
+
 Run analysis from the terminal with an image path:
 
-bash
-python main.py path/to/medicine_image.jpg
-This prints the AI-generated analysis in the console.​
 
-GUI Mode
+This prints the AI-generated analysis in the console.
+
+### GUI Mode
+
 Launch the desktop GUI:
 
-bash
-python gui_app.py
+
 Then:
 
-Click Browse Image and choose a .jpg, .jpeg, or .png file of a medicine packet.​
+1. Click **Browse Image** and choose a `.jpg`, `.jpeg`, or `.png` file of a medicine packet. 
+2. Click **Analyze** to start processing.[file:21]  
+3. Read the summary in the text box; you can edit, copy, or save it as `.txt`.
 
-Click Analyze to start processing.​
+If there is no recognizable text or the AI call fails, the app shows informative error messages and suggestions (e.g., improve image quality, check API key/network).
 
-Read the summary in the text box; you can edit, copy, or save it as .txt.​
+## Input and Output
 
-If there is no recognizable text or the AI call fails, the app shows informative error messages and suggestions (e.g., improve image quality, check API key/network).​
+- **Input formats:** `.jpg`, `.jpeg`, `.png` medicine packet images.
+- **Recommended quality:** clear image, minimal blur, text in focus, resolution around 720p or higher.  
+- **Intermediate formats:** optional `.txt` for OCR output and `.log` for debugging, if enabled.
+- **Output:**  
+  - Shown in GUI via `QTextEdit`.  
+  - Can be saved as UTF‑8 `.txt` or captured via screenshot for reports.
+  
+## Sample Output:
 
-Input and Output
-Input formats: .jpg, .jpeg, .png medicine packet images.​
+Medicine Name: Paracetamol 500mg
 
-Recommended quality: clear image, minimal blur, text in focus, resolution around 720p or higher.​
+Purpose: Pain relief, fever reduction
 
-Intermediate formats: optional .txt for OCR output and .log for debugging, if enabled.​
+Dosage: 1-2 tablets every 6-8 hours
 
-Output:
+Warnings: Avoid alcohol, consult doctor if pregnant
 
-Shown in GUI via QTextEdit.
-Can be saved as UTF‑8 .txt or captured via screenshot for reports.​
+Expiry: Check packaging
 
 The summary typically includes purpose of the medicine, usage instructions, side effects, expiry or manufacturing details, storage instructions, and possible alternatives inferred by the model.
 
-Advantages
-User-friendly: Clean, minimal interface built with PyQt5, suitable for non-technical users.​
+## Advantages
 
-Time-saving: Automates reading and interpretation of complex medicine labels.​
+- **User-friendly:** Clean, minimal interface built with PyQt5, suitable for non-technical users. 
+- **Time-saving:** Automates reading and interpretation of complex medicine labels. 
+- **Accessibility:** Helps elderly users, visually challenged users, and those with low medical literacy. 
+- **Scalable:** Modular design makes it easier to plug in new OCR engines or AI models later.  
+- **Secure handling:** API keys managed via `.env` and local processing of images.  
 
-Accessibility: Helps elderly users, visually challenged users, and those with low medical literacy.​
 
-Scalable: Modular design makes it easier to plug in new OCR engines or AI models later.​
+## Troubleshooting
 
-Secure handling: API keys managed via .env and local processing of images.​
+| Issue | Solution |
+|-------|----------|
+| `No module named 'PyQt5'` | `pip install -r requirements.txt` |
+| `Tesseract not found` | Install Tesseract and add to PATH |
+| `Gemini API error` | Check `.env` file and internet connection |
+| `No text detected` | Use clearer image, better lighting |
+| `pip install easyocr fails` | `pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu` |
 
-Future Work
-Potential enhancements for this repository:
+## Advantages
 
-Multilingual OCR and summaries for regional languages.​
+- 🎯 **Accessible** - Helps elderly/low-vision users
+- ⚡ **Fast** - OCR + AI in seconds
+- 🔒 **Secure** - Local processing, secure API keys
+- 📱 **Cross-platform** - Windows/Linux/macOS
+- 🛠️ **Modular** - Easy to extend/modify
 
-Barcode/QR-code scanning to query structured drug databases.​
+## Future Work
 
-Text-to-speech for the generated summaries.​
+- 🌐 Multilingual OCR support
+- 📱 Mobile app version
+- 🔊 Text-to-speech output
+- 🩺 Drug interaction checker
+- 📊 Batch processing mode
 
-Advanced analytics like interaction checks or dosage validation via external APIs.​
+## Contributors
 
-Contributors
-Khune Pranav Vishwajit – B.Tech CSE (AIML)
+| Name | Roll No | Contribution |
+|------|---------|--------------|
+| Khune Pranav Vishwajit | 16 | Core development, GUI |
+| Aditya Netaji Barmade | 33 | OCR integration, AI |
 
-Aditya Netaji Barmade – B.Tech CSE (AIML)
+
+## License
+
+MIT License © 2025 Medicine Packet Analyzer
+
+---
+
+*⭐ Star this repo if it helps! Questions? Open an [Issue](https://github.com/AdityaBarmade/Medicine-packet-analyzer/issues/new)
+
+## License
+
+MIT License - feel free to use and modify.
+
+
+
+   
+
+
+
+
+
