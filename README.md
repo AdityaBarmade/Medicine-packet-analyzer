@@ -54,25 +54,21 @@ The project follows a layered architecture to keep components modular and mainta
 
 These tools were selected for robust OCR, flexible GUI design, and easy integration with AI services.
 
-## Project Structure
-
+## Project Structure 
 Medicine-packet-analyzer/
 
-
-├── main.py                
-├── gui_app.py               
-├── analyzer.py             
-├── ocr_engine.py           
-├── gemini_ai.py           
-├── requirements.txt       
-├── .env.example            
-│
-├── assets/                
-│   ├── ui.png              
-│   ├── upload.png          
-│   └── output.png         
-│
-└── README.md
+    ├── main.py # CLI entry point
+    ├── ui_tkinter.py # GUI application
+    ├── analyzer.py # OCR + AI orchestration
+    ├── ocr_engine.py # OCR processing
+    ├── gemini_ai.py # Gemini API integration
+    ├── requirements.txt # Python dependencies
+    ├── README.md # Project documentation
+    │
+    └── assets/ # Screenshots
+       ├── ui.png # Main application UI
+       ├── upload.png # Image upload screen
+       └── output.png # Sample AI output
 
 
 ## Installation
